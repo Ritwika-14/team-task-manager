@@ -17,71 +17,104 @@ export default function Signup() {
 
     try {
       await axios.post(
-        "https://team-task-manager-production-41c7.up.railway.app//api/auth/signup",
+        "https://team-task-manager-production-41c7.up.railway.app/api/auth/signup",
         form
       );
 
       navigate("/");
 
     } catch (error) {
-  console.log(error.response?.data);
-  alert(error.response?.data?.message || "Signup failed");
-}
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Signup failed");
+    }
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-slate-200 flex justify-center items-center px-6">
+
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow w-96"
+        className="w-full max-w-2xl bg-white/80 backdrop-blur-md p-12 rounded-3xl shadow-2xl border border-white/50"
       >
-        <h1 className="text-2xl font-bold mb-5">Signup</h1>
 
+        {/* Title */}
+        <div className="text-center mb-10">
+          <h1 className="text-5xl font-bold text-gray-800 mb-3">
+            Create Account
+          </h1>
+
+          <p className="text-gray-500 text-lg">
+            Join TaskForge and manage work smarter
+          </p>
+        </div>
+
+        {/* Name */}
         <input
-          className="border p-2 w-full mb-3"
-          placeholder="Name"
+          className="border border-gray-300 rounded-2xl px-5 py-4 w-full mb-5 text-lg focus:ring-2 focus:ring-green-500 outline-none transition"
+          placeholder="Enter your name"
           onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
+            setForm({
+              ...form,
+              name: e.target.value
+            })
           }
         />
 
+        {/* Email */}
         <input
-          className="border p-2 w-full mb-3"
-          placeholder="Email"
+          className="border border-gray-300 rounded-2xl px-5 py-4 w-full mb-5 text-lg focus:ring-2 focus:ring-green-500 outline-none transition"
+          placeholder="Enter your email"
           onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
+            setForm({
+              ...form,
+              email: e.target.value
+            })
           }
         />
 
+        {/* Password */}
         <input
           type="password"
-          className="border p-2 w-full mb-3"
-          placeholder="Password"
+          className="border border-gray-300 rounded-2xl px-5 py-4 w-full mb-5 text-lg focus:ring-2 focus:ring-green-500 outline-none transition"
+          placeholder="Create password"
           onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
+            setForm({
+              ...form,
+              password: e.target.value
+            })
           }
         />
 
+        {/* Role */}
         <select
-          className="border p-2 w-full mb-3"
+          className="border border-gray-300 rounded-2xl px-5 py-4 w-full mb-6 text-lg focus:ring-2 focus:ring-green-500 outline-none transition bg-white"
           onChange={(e) =>
-            setForm({ ...form, role: e.target.value })
+            setForm({
+              ...form,
+              role: e.target.value
+            })
           }
         >
           <option value="member">Member</option>
           <option value="admin">Admin</option>
         </select>
 
-        <button className="bg-green-600 text-white w-full p-2 rounded">
+        {/* Button */}
+        <button className="bg-green-600 hover:bg-green-700 text-white w-full py-4 rounded-2xl text-lg font-semibold shadow-md transition duration-300">
           Signup
         </button>
 
-        <p className="mt-4 text-sm">
+        {/* Footer */}
+        <p className="mt-6 text-center text-gray-600 text-base">
           Already have account?{" "}
-          <Link to="/" className="text-blue-600">
+          <Link
+            to="/"
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Login
           </Link>
         </p>
+
       </form>
     </div>
   );

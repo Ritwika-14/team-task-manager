@@ -24,7 +24,6 @@ export default function Projects() {
     fetchMembers();
   }, []);
 
-  // Logged User
   const fetchUser = async () => {
     const res = await axios.get(
       "https://team-task-manager-production-41c7.up.railway.app/api/auth/me",
@@ -38,7 +37,6 @@ export default function Projects() {
     setUser(res.data);
   };
 
-  // Projects
   const fetchProjects = async () => {
     const res = await axios.get(
       "https://team-task-manager-production-41c7.up.railway.app/api/projects",
@@ -52,35 +50,19 @@ export default function Projects() {
     setProjects(res.data);
   };
 
-  // Collect Members
   const fetchMembers = async () => {
-    const res = await axios.get(
-      "https://team-task-manager-production-41c7.up.railway.app/api/projects",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+  const res = await axios.get(
+    "https://team-task-manager-production-41c7.up.railway.app/api/users/members",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    );
+    }
+  );
 
-    let all = [];
+  setMembers(res.data);
+};
 
-    res.data.forEach((p) => {
-      if (p.members) {
-        all.push(...p.members);
-      }
-    });
-
-    const unique = Array.from(
-      new Map(
-        all.map((m) => [m._id, m])
-      ).values()
-    );
-
-    setMembers(unique);
-  };
-
-  // Create or Update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -94,7 +76,6 @@ export default function Projects() {
           }
         }
       );
-
       alert("Project Updated");
     } else {
       await axios.post(
@@ -106,7 +87,6 @@ export default function Projects() {
           }
         }
       );
-
       alert("Project Created");
     }
 
@@ -121,13 +101,8 @@ export default function Projects() {
     fetchProjects();
   };
 
-  // Delete
   const deleteProject = async (id) => {
-    const confirmDelete =
-      window.confirm(
-        "Delete this project?"
-      );
-
+    const confirmDelete = window.confirm("Delete this project?");
     if (!confirmDelete) return;
 
     await axios.delete(
@@ -142,21 +117,14 @@ export default function Projects() {
     fetchProjects();
   };
 
-  // Edit
   const editProject = (project) => {
     setEditingId(project._id);
 
     setForm({
       name: project.name,
-      description:
-        project.description,
-      deadline:
-        project.deadline
-          ?.split("T")[0],
-      members:
-        project.members.map(
-          (m) => m._id
-        )
+      description: project.description,
+      deadline: project.deadline?.split("T")[0],
+      members: project.members.map((m) => m._id)
     });
 
     window.scrollTo({
@@ -165,7 +133,6 @@ export default function Projects() {
     });
   };
 
-  // Multi Select
   const handleMembers = (e) => {
     const values = Array.from(
       e.target.selectedOptions,
@@ -182,9 +149,9 @@ export default function Projects() {
     <>
       <Navbar />
 
-      <div className="p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 p-8">
 
-        <h1 className="text-3xl font-bold mb-6">
+        <h1 className="text-4xl font-bold text-gray-800 mb-8">
           Projects
         </h1>
 
@@ -192,140 +159,121 @@ export default function Projects() {
         {user?.role === "admin" && (
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-xl shadow mb-8"
+            className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-lg mb-10 border border-gray-200"
           >
-            <h2 className="text-xl font-bold mb-4">
-              {editingId
-                ? "Edit Project"
-                : "Create Project"}
+            <h2 className="text-2xl font-bold mb-6 text-gray-700">
+              {editingId ? "Edit Project" : "Create Project"}
             </h2>
 
-            <input
-              className="border p-2 w-full mb-3"
-              placeholder="Project Name"
-              value={form.name}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  name:
-                    e.target.value
-                })
-              }
-            />
+            <div className="grid md:grid-cols-2 gap-4">
+              <input
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Project Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    name: e.target.value
+                  })
+                }
+              />
 
-            <input
-              className="border p-2 w-full mb-3"
+              <input
+                type="date"
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                value={form.deadline}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    deadline: e.target.value
+                  })
+                }
+              />
+            </div>
+
+            <textarea
+              rows="4"
+              className="border border-gray-300 rounded-xl px-4 py-3 w-full mt-4 focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="Description"
               value={form.description}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  description:
-                    e.target.value
-                })
-              }
-            />
-
-            <input
-              type="date"
-              className="border p-2 w-full mb-3"
-              value={form.deadline}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  deadline:
-                    e.target.value
+                  description: e.target.value
                 })
               }
             />
 
             <select
               multiple
-              className="border p-2 w-full h-32 mb-3"
+              className="border border-gray-300 rounded-xl px-4 py-3 w-full h-36 mt-4 focus:ring-2 focus:ring-blue-500 outline-none"
               onChange={handleMembers}
             >
               {members.map((m) => (
-                <option
-                  key={m._id}
-                  value={m._id}
-                >
+                <option key={m._id} value={m._id}>
                   {m.name}
                 </option>
               ))}
             </select>
 
-            <button className="bg-blue-600 text-white px-5 py-2 rounded">
-              {editingId
-                ? "Update Project"
-                : "Create Project"}
+            <button className="mt-5 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition">
+              {editingId ? "Update Project" : "Create Project"}
             </button>
           </form>
         )}
 
-        {/* CARDS */}
-        <div className="grid md:grid-cols-3 gap-5">
+        {/* PROJECT CARDS */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <div
               key={project._id}
-              className="bg-white p-5 rounded-xl shadow"
+              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold">
+              <h2 className="text-2xl font-bold text-gray-800">
                 {project.name}
               </h2>
 
-              <p className="mt-2 text-gray-600">
+              <p className="mt-3 text-gray-600 leading-relaxed">
                 {project.description}
               </p>
 
-              <p className="mt-2">
-                Deadline:
-                {" "}
-                <b>
-                  {new Date(
-                    project.deadline
-                  ).toLocaleDateString()}
-                </b>
-              </p>
+              <div className="mt-4 space-y-2 text-sm">
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Deadline:
+                  </span>{" "}
+                  {new Date(project.deadline).toLocaleDateString()}
+                </p>
 
-              <p className="mt-2">
-                Members:
-                {" "}
-                <b>
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Members:
+                  </span>{" "}
                   {project.members
-                    ?.map(
-                      (m) =>
-                        m.name
-                    )
+                    ?.map((m) => m.name)
                     .join(", ")}
-                </b>
-              </p>
+                </p>
+              </div>
 
               {user?.role === "admin" && (
-                <div className="mt-4 space-x-2">
+                <div className="mt-5 flex gap-3">
                   <button
-                    onClick={() =>
-                      editProject(
-                        project
-                      )
-                    }
-                    className="bg-yellow-500 text-white px-3 py-1 rounded"
+                    onClick={() => editProject(project)}
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-xl transition"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() =>
-                      deleteProject(
-                        project._id
-                      )
+                      deleteProject(project._id)
                     }
-                    className="bg-red-500 text-white px-3 py-1 rounded"
+                    className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl transition"
                   >
                     Delete
                   </button>
                 </div>
               )}
-
             </div>
           ))}
         </div>

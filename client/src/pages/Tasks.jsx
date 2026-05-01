@@ -24,7 +24,6 @@ export default function Tasks() {
     fetchProjects();
   }, []);
 
-  // Logged In User
   const fetchUser = async () => {
     const res = await axios.get(
       "https://team-task-manager-production-41c7.up.railway.app/api/auth/me",
@@ -38,7 +37,6 @@ export default function Tasks() {
     setUser(res.data);
   };
 
-  // Projects
   const fetchProjects = async () => {
     const res = await axios.get(
       "https://team-task-manager-production-41c7.up.railway.app/api/projects",
@@ -69,7 +67,6 @@ export default function Tasks() {
     }
   };
 
-  // Tasks
   const fetchTasks = async (projectId) => {
     const res = await axios.get(
       `https://team-task-manager-production-41c7.up.railway.app/api/tasks/project/${projectId}`,
@@ -83,7 +80,6 @@ export default function Tasks() {
     setTasks(res.data);
   };
 
-  // Change Project
   const handleProjectChange = (id) => {
     const selected = projects.find(
       (p) => p._id === id
@@ -103,7 +99,6 @@ export default function Tasks() {
     fetchTasks(id);
   };
 
-  // Create Task (Admin Only)
   const createTask = async (e) => {
     e.preventDefault();
 
@@ -121,7 +116,6 @@ export default function Tasks() {
     alert("Task Created");
   };
 
-  // Update Status
   const updateStatus = async (id, status) => {
     await axios.put(
       `https://team-task-manager-production-41c7.up.railway.app/api/tasks/${id}`,
@@ -136,7 +130,6 @@ export default function Tasks() {
     fetchTasks(form.projectId);
   };
 
-  // Delete Task (Admin)
   const deleteTask = async (id) => {
     await axios.delete(
       `https://team-task-manager-production-41c7.up.railway.app/api/tasks/${id}`,
@@ -154,8 +147,9 @@ export default function Tasks() {
     <>
       <Navbar />
 
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 p-8">
+
+        <h1 className="text-4xl font-bold text-gray-800 mb-8">
           Task Management
         </h1>
 
@@ -163,25 +157,41 @@ export default function Tasks() {
         {user?.role === "admin" && (
           <form
             onSubmit={createTask}
-            className="bg-white p-6 rounded-xl shadow mb-8"
+            className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-lg mb-10 border border-gray-200"
           >
-            <h2 className="text-xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mb-6 text-gray-700">
               Create & Assign Task
             </h2>
 
-            <input
-              className="border p-2 w-full mb-3"
-              placeholder="Task Title"
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  title: e.target.value
-                })
-              }
-            />
+            <div className="grid md:grid-cols-2 gap-4">
 
-            <input
-              className="border p-2 w-full mb-3"
+              <input
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Task Title"
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    title: e.target.value
+                  })
+                }
+              />
+
+              <input
+                type="date"
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    dueDate: e.target.value
+                  })
+                }
+              />
+
+            </div>
+
+            <textarea
+              rows="4"
+              className="border border-gray-300 rounded-xl px-4 py-3 w-full mt-4 focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="Description"
               onChange={(e) =>
                 setForm({
@@ -191,112 +201,115 @@ export default function Tasks() {
               }
             />
 
-            <select
-              className="border p-2 w-full mb-3"
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  priority: e.target.value
-                })
-              }
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
 
-            <input
-              type="date"
-              className="border p-2 w-full mb-3"
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  dueDate: e.target.value
-                })
-              }
-            />
+              <select
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full"
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    priority: e.target.value
+                  })
+                }
+              >
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+              </select>
 
-            {/* Project */}
-            <select
-              className="border p-2 w-full mb-3"
-              value={form.projectId}
-              onChange={(e) =>
-                handleProjectChange(
-                  e.target.value
-                )
-              }
-            >
-              {projects.map((p) => (
-                <option
-                  key={p._id}
-                  value={p._id}
-                >
-                  {p.name}
-                </option>
-              ))}
-            </select>
+              <select
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full"
+                value={form.projectId}
+                onChange={(e) =>
+                  handleProjectChange(
+                    e.target.value
+                  )
+                }
+              >
+                {projects.map((p) => (
+                  <option
+                    key={p._id}
+                    value={p._id}
+                  >
+                    {p.name}
+                  </option>
+                ))}
+              </select>
 
-            {/* Member */}
-            <select
-              className="border p-2 w-full mb-3"
-              value={form.assignedTo}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  assignedTo: e.target.value
-                })
-              }
-            >
-              {members.map((m) => (
-                <option
-                  key={m._id}
-                  value={m._id}
-                >
-                  {m.name}
-                </option>
-              ))}
-            </select>
+              <select
+                className="border border-gray-300 rounded-xl px-4 py-3 w-full"
+                value={form.assignedTo}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    assignedTo: e.target.value
+                  })
+                }
+              >
+                {members.map((m) => (
+                  <option
+                    key={m._id}
+                    value={m._id}
+                  >
+                    {m.name}
+                  </option>
+                ))}
+              </select>
 
-            <button className="bg-blue-600 text-white px-5 py-2 rounded">
+            </div>
+
+            <button className="mt-5 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition">
               Assign Task
             </button>
           </form>
         )}
 
         {/* TASK CARDS */}
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {tasks.map((task) => (
             <div
               key={task._id}
-              className="bg-white p-5 rounded-xl shadow"
+              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold">
+              <h2 className="text-2xl font-bold text-gray-800">
                 {task.title}
               </h2>
 
-              <p>{task.description}</p>
+              <p className="mt-3 text-gray-600 leading-relaxed">
+                {task.description}
+              </p>
 
-              <p className="mt-2">
-                Assigned To:
-                {" "}
-                <b>
+              <div className="mt-4 space-y-2 text-sm">
+
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Assigned To:
+                  </span>{" "}
                   {task.assignedTo?.name}
-                </b>
-              </p>
+                </p>
 
-              <p>
-                Priority:
-                {" "}
-                <b>{task.priority}</b>
-              </p>
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Priority:
+                  </span>{" "}
+                  <span className="capitalize">
+                    {task.priority}
+                  </span>
+                </p>
 
-              <p>
-                Status:
-                {" "}
-                <b>{task.status}</b>
-              </p>
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Status:
+                  </span>{" "}
+                  <span className="capitalize">
+                    {task.status}
+                  </span>
+                </p>
 
-              <div className="mt-4 space-x-2">
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+
                 <button
                   onClick={() =>
                     updateStatus(
@@ -304,7 +317,7 @@ export default function Tasks() {
                       "in-progress"
                     )
                   }
-                  className="bg-yellow-500 text-white px-3 py-1 rounded"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl transition"
                 >
                   Progress
                 </button>
@@ -316,7 +329,7 @@ export default function Tasks() {
                       "done"
                     )
                   }
-                  className="bg-green-600 text-white px-3 py-1 rounded"
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition"
                 >
                   Done
                 </button>
@@ -326,13 +339,13 @@ export default function Tasks() {
                     onClick={() =>
                       deleteTask(task._id)
                     }
-                    className="bg-red-500 text-white px-3 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition"
                   >
                     Delete
                   </button>
                 )}
-              </div>
 
+              </div>
             </div>
           ))}
         </div>
