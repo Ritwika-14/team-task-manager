@@ -83,7 +83,7 @@ LOGIN DETAILS
 ADMIN LOGIN
 
 Email: admin@gmail.com
-Password: admin123
+Password: admin1432
 
 USER LOGIN
 
