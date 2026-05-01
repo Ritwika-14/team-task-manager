@@ -33,7 +33,7 @@ PROJECT SETUP
 
 1. Clone Repository
 
-git clone https://github.com/yourusername/task-manager.git
+git clone https://github.com/Ritwika-14/task-manager.git
 
 2. Open Project Folder
 
