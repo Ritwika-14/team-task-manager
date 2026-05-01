@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   const fetchStats = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/dashboard/stats",
+      "https://team-task-manager-production-41c7.up.railway.app/api/dashboard/stats",
       {
         headers: {
           Authorization: `Bearer ${token}`

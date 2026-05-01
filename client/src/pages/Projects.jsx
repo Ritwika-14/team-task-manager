@@ -27,7 +27,7 @@ export default function Projects() {
   // Logged User
   const fetchUser = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/auth/me",
+      "https://team-task-manager-production-41c7.up.railway.app/api/auth/me",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -41,7 +41,7 @@ export default function Projects() {
   // Projects
   const fetchProjects = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/projects",
+      "https://team-task-manager-production-41c7.up.railway.app/api/projects",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -55,7 +55,7 @@ export default function Projects() {
   // Collect Members
   const fetchMembers = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/projects",
+      "https://team-task-manager-production-41c7.up.railway.app/api/projects",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -86,7 +86,7 @@ export default function Projects() {
 
     if (editingId) {
       await axios.put(
-        `http://localhost:5000/api/projects/${editingId}`,
+        `https://team-task-manager-production-41c7.up.railway.app/api/projects/${editingId}`,
         form,
         {
           headers: {
@@ -98,7 +98,7 @@ export default function Projects() {
       alert("Project Updated");
     } else {
       await axios.post(
-        "http://localhost:5000/api/projects",
+        "https://team-task-manager-production-41c7.up.railway.app/api/projects",
         form,
         {
           headers: {
@@ -131,7 +131,7 @@ export default function Projects() {
     if (!confirmDelete) return;
 
     await axios.delete(
-      `http://localhost:5000/api/projects/${id}`,
+      `https://team-task-manager-production-41c7.up.railway.app/api/projects/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

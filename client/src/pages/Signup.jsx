@@ -17,7 +17,7 @@ export default function Signup() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "https://team-task-manager-production-41c7.up.railway.app//api/auth/signup",
         form
       );
 

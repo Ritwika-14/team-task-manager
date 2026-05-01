@@ -27,7 +27,7 @@ export default function Tasks() {
   // Logged In User
   const fetchUser = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/auth/me",
+      "https://team-task-manager-production-41c7.up.railway.app/api/auth/me",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -41,7 +41,7 @@ export default function Tasks() {
   // Projects
   const fetchProjects = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/projects",
+      "https://team-task-manager-production-41c7.up.railway.app/api/projects",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -72,7 +72,7 @@ export default function Tasks() {
   // Tasks
   const fetchTasks = async (projectId) => {
     const res = await axios.get(
-      `http://localhost:5000/api/tasks/project/${projectId}`,
+      `https://team-task-manager-production-41c7.up.railway.app/api/tasks/project/${projectId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -108,7 +108,7 @@ export default function Tasks() {
     e.preventDefault();
 
     await axios.post(
-      "http://localhost:5000/api/tasks",
+      "https://team-task-manager-production-41c7.up.railway.app/api/tasks",
       form,
       {
         headers: {
@@ -124,7 +124,7 @@ export default function Tasks() {
   // Update Status
   const updateStatus = async (id, status) => {
     await axios.put(
-      `http://localhost:5000/api/tasks/${id}`,
+      `https://team-task-manager-production-41c7.up.railway.app/api/tasks/${id}`,
       { status },
       {
         headers: {
@@ -139,7 +139,7 @@ export default function Tasks() {
   // Delete Task (Admin)
   const deleteTask = async (id) => {
     await axios.delete(
-      `http://localhost:5000/api/tasks/${id}`,
+      `https://team-task-manager-production-41c7.up.railway.app/api/tasks/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

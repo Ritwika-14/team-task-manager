@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://team-task-manager-production-41c7.up.railway.app/api/auth/login",
         form
       );
 
